@@ -87,6 +87,7 @@ app.py  seed.py
 | POST | `/api/comments/<video_id>` · `/api/comments/<id>/like` | 댓글 |
 | GET | `/api/notifications/` · POST `/read` | 알림 |
 
++
 
 ## 얼굴 로그인 실행을 위한 AWS 설정
 
