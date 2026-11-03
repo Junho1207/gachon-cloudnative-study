@@ -25,6 +25,10 @@ export default function Login() {
           <h1 style={{ marginTop: 16, fontSize: 24, fontWeight: 400 }}>로그인</h1>
           <div className="muted" style={{ fontSize: 14 }}>TubeLite로 이동</div>
         </div>
+        <div className="row" style={{ gap: 12, marginBottom: 20 }}>
+          <span style={{ fontWeight: 600 }}>비밀번호로 로그인하기</span>
+          <Link to="/faceauth" style={{ color: 'var(--blue)' }}>페이스 로그인하기 →</Link>
+        </div>
         <form onSubmit={submit} className="form">
           <ErrorBox error={err} />
           <Field label="아이디"><input value={f.username} onChange={set('username')} autoFocus required /></Field>
