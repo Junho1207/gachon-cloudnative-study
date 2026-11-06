@@ -100,6 +100,26 @@ export default function Index() {
     }
   }
 
+  async function removeFace(e) {
+    e.preventDefault()
+    if (busy || !window.confirm('등록된 얼굴을 삭제할까요?')) return
+    setBusy(true)
+    setMessage('')
+    try {
+      const data = new FormData()
+      data.append('password', password)
+      const result = await api.post('/api/faceauth/delete', data)
+      setPassword('')
+      // refresh 후 등록 화면으로 돌아가면서 message 가 지워지므로 alert 로 알린다
+      window.alert(result.message)
+      await refresh()
+    } catch (error) {
+      setMessage(error.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
   if (me?.face_user_id) {
     return (
       <div className="narrow" style={{ maxWidth: 560, paddingTop: 32 }}>
@@ -109,6 +129,16 @@ export default function Index() {
           <p style={{ marginBottom: 0 }}>{me.name || me.id} 계정에 얼굴이 등록되어 있습니다.</p>
         </div>
         <p>다음 로그인부터 페이스 로그인을 사용할 수 있어요.</p>
+        <form onSubmit={removeFace} className="form" style={{ marginBottom: 16 }}>
+          <Field label="현재 계정 비밀번호">
+            <input type="password" autoComplete="current-password" required
+              value={password} onChange={e => setPassword(e.target.value)} />
+          </Field>
+          <Button type="submit" variant="ghost" disabled={busy}>
+            {busy ? '삭제 중…' : '얼굴 삭제'}
+          </Button>
+          {message && <p role="status" style={{ margin: 0 }}>{message}</p>}
+        </form>
         <Link to="/">홈으로 돌아가기</Link>
       </div>
     )

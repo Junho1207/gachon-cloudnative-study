@@ -108,7 +108,10 @@ app.py  seed.py
         "rekognition:IndexFaces",
         "rekognition:CreateUser",
         "rekognition:AssociateFaces",
-        "rekognition:SearchUsersByImage"
+        "rekognition:SearchUsersByImage",
+        "rekognition:ListFaces",
+        "rekognition:DeleteUser",
+        "rekognition:DeleteFaces"
       ],
       "Resource": "arn:aws:rekognition:ap-northeast-2:본인_AWS_계정_ID:collection/tube-lite-team5-faces"
     },
@@ -141,3 +144,9 @@ python face_collection.py
 등록 후 로그아웃하고 로그인 화면에서 **페이스 로그인하기**를 선택하면 됩니다.
 
 각자의 AWS 환경에서 얼굴을 새로 등록해야 합니다. 웹캠은 `localhost` 또는 HTTPS에서 사용할 수 있습니다.
+
+### 4. 얼굴 삭제
+
+로그인 → 왼쪽 **얼굴 등록** → 현재 비밀번호 입력 → **얼굴 삭제**
+
+삭제 후에는 페이스 로그인이 되지 않으며, 다시 등록할 수 있습니다.
