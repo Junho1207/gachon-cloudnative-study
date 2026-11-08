@@ -22,9 +22,15 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 ALLOWED = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.webm', '.mov', '.pdf'}
 
 
+_s3_client = None
+
+
 def _s3():
     """설정한 AWS 리전으로 S3 연결을 만든다."""
-    return boto3.client('s3', region_name=os.getenv('AWS_REGION'))
+    global _s3_client
+    if _s3_client is None:
+        _s3_client = boto3.client('s3', region_name=os.getenv('AWS_REGION'))
+    return _s3_client
 
 
 class NotAllowed(ValueError):
