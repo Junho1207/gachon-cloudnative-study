@@ -27,6 +27,7 @@ DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data.db')
 _lock = threading.RLock()
 _known = set()
 _conn_obj = None
+_ddb_res = None
 
 
 def _use_dynamodb() -> bool:
@@ -36,11 +37,14 @@ def _use_dynamodb() -> bool:
 
 def _ddb_table(table: str):
     """예: items → carrot-lite-team7-items."""
+    global _ddb_res
+    if _ddb_res is None:
+        _ddb_res = boto3.resource(
+            'dynamodb',
+            region_name=os.getenv('AWS_REGION')
+        )
     name = os.environ['DDB_PREFIX'] + table
-    return boto3.resource(
-        'dynamodb',
-        region_name=os.getenv('AWS_REGION')
-    ).Table(name)
+    return _ddb_res.Table(name)
 
 
 def _to_dynamodb(value):

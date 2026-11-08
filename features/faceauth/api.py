@@ -245,3 +245,4 @@ def login():
     session.clear()
     session["user_id"] = linked[0]["id"]
     return jsonify(message="얼굴 로그인 성공!")
+

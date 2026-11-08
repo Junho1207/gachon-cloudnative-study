@@ -30,3 +30,4 @@ except ClientError as e:
         print("이미 생성된 컬렉션입니다:", COLLECTION_ID)
     else:
         raise
+
