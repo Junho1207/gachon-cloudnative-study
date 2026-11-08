@@ -86,3 +86,67 @@ app.py  seed.py
 | GET | `/api/channels/<uid>` · POST `/<uid>/subscribe` · GET `/subscriptions` | 채널 · 구독 |
 | POST | `/api/comments/<video_id>` · `/api/comments/<id>/like` | 댓글 |
 | GET | `/api/notifications/` · POST `/read` | 알림 |
+
++
+
+## 얼굴 로그인 실행을 위한 AWS 설정
+
+### 1. IAM 권한 추가
+
+**IAM → 사용자 → 액세스 키를 발급한 사용자 → 권한 → 인라인 정책 생성 → JSON**
+
+아래 `본인_AWS_계정_ID`를 본인의 12자리 AWS 계정 ID로 바꿔 추가합니다. 기존 DB·S3 권한은 유지하세요.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rekognition:CreateCollection",
+        "rekognition:IndexFaces",
+        "rekognition:CreateUser",
+        "rekognition:AssociateFaces",
+        "rekognition:SearchUsersByImage",
+        "rekognition:ListFaces",
+        "rekognition:DeleteUser",
+        "rekognition:DeleteFaces"
+      ],
+      "Resource": "arn:aws:rekognition:ap-northeast-2:본인_AWS_계정_ID:collection/tube-lite-team5-faces"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "rekognition:DetectFaces",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+### 2. 컬렉션 생성 — 최초 1회
+
+프로젝트 최상위 폴더에서 실행합니다.
+
+```powershell
+python -m pip install -r requirements.txt
+python face_collection.py
+```
+
+`컬렉션 생성 완료` 또는 `이미 생성된 컬렉션입니다`가 나오면 됩니다.
+
+컬렉션 이름은 코드와 동일한 `tube-lite-team5-faces`를 사용합니다. 계정이 다르므로 이름이 같아도 서로 별개입니다.
+
+### 3. 최초 얼굴 등록
+
+비밀번호 로그인 → 왼쪽 **얼굴 등록** → 카메라 권한 허용 → 현재 비밀번호 입력 → **촬영하고 얼굴 등록**
+
+등록 후 로그아웃하고 로그인 화면에서 **페이스 로그인하기**를 선택하면 됩니다.
+
+각자의 AWS 환경에서 얼굴을 새로 등록해야 합니다. 웹캠은 `localhost` 또는 HTTPS에서 사용할 수 있습니다.
+
+### 4. 얼굴 삭제
+
+로그인 → 왼쪽 **얼굴 등록** → 현재 비밀번호 입력 → **얼굴 삭제**
+
+삭제 후에는 페이스 로그인이 되지 않으며, 다시 등록할 수 있습니다.
