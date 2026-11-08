@@ -38,8 +38,9 @@ export default function Layout({ children }) {
     nav(q ? `/results?q=${encodeURIComponent(q)}` : '/')
   }
 
-  const main = navItems.filter((n) => n.section !== 'you')
-  const you = navItems.filter((n) => n.section === 'you')
+  const visibleItems = navItems.filter((n) => !n.requiresAuth || Boolean(me))
+  const main = visibleItems.filter((n) => n.section !== 'you')
+  const you = visibleItems.filter((n) => n.section === 'you')
   const mini = !open || isWatch
 
   return (
